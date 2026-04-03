@@ -39,8 +39,10 @@ class SpaceMission(BaseModel):
         if not self.mission_id.startswith("M"):
             raise ValueError("Mission ID must start with 'M'")
 
-        if not any(member.rank in [Rank.COMMANDER, Rank.CAPTAIN] for member in self.crew):
-            raise ValueError("Mission must have at least one Commander or Captain")
+        if not any(member.rank in [Rank.COMMANDER, Rank.CAPTAIN]
+                   for member in self.crew):
+            raise ValueError("Mission must have at least"
+                             " one Commander or Captain")
 
         if not all(member.is_active for member in self.crew):
             raise ValueError("All crew members must be active")
@@ -48,7 +50,8 @@ class SpaceMission(BaseModel):
         if self.duration_days > 365:
             exp_crew = [m for m in self.crew if m.years_experience >= 5]
             if len(exp_crew) < len(self.crew) / 2:
-                raise ValueError("Long missions need 50% experienced crew (5+ years)")
+                raise ValueError("Long missions need 50% "
+                                 "experienced crew (5+ years)")
 
         return self
 
@@ -58,9 +61,26 @@ def main():
     print("=========================================")
 
     crew = [
-        CrewMember(member_id="C01", name="Sarah Connor", rank=Rank.COMMANDER, age=45, specialization="Mission Command", years_experience=20),
-        CrewMember(member_id="C02", name="John Smith", rank=Rank.LIEUTENANT, age=30, specialization="Navigation", years_experience=8),
-        CrewMember(member_id="C03", name="Alice Johnson", rank=Rank.OFFICER, age=25, specialization="Engineering", years_experience=3)
+        CrewMember(member_id="C01",
+                   name="Sarah Connor",
+                   rank=Rank.COMMANDER,
+                   age=45,
+                   specialization="Mission Command",
+                   years_experience=20),
+
+        CrewMember(member_id="C02",
+                   name="John Smith",
+                   rank=Rank.LIEUTENANT,
+                   age=30,
+                   specialization="Navigation",
+                   years_experience=8),
+
+        CrewMember(member_id="C03",
+                   name="Alice Johnson",
+                   rank=Rank.OFFICER,
+                   age=25,
+                   specialization="Engineering",
+                   years_experience=3)
     ]
 
     try:
@@ -91,7 +111,12 @@ def main():
 
     try:
         bad_crew = [
-            CrewMember(member_id="C04", name="Bob Ross", rank=Rank.CADET, age=20, specialization="Art", years_experience=1)
+            CrewMember(member_id="C04",
+                       name="Bob Ross",
+                       rank=Rank.CADET,
+                       age=20,
+                       specialization="Art",
+                       years_experience=1)
         ]
         SpaceMission(
             mission_id="M_FAIL",
